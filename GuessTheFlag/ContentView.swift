@@ -29,6 +29,9 @@ struct ContentView: View {
                 Text("Guess the Flag")
                         .font(.largeTitle.weight(.bold))
                         .foregroundColor(.white)
+                        .frame(width: 250, height: 50, alignment: .bottom)
+                        .background(.ultraThinMaterial)
+                        .clipShape(Capsule())
                 VStack(spacing: 15) {
                         Text("Tap the flag of")
                         .font(.subheadline.weight(.heavy))
