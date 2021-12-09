@@ -26,9 +26,9 @@ struct ContentView: View {
                 .ignoresSafeArea()
             VStack {
                 Spacer()
+                // ViewAndModifier use custom largeTittle modifier
                 Text("Guess the Flag")
-                        .font(.largeTitle.weight(.bold))
-                        .foregroundColor(.white)
+                    .largeTitle()
                 VStack(spacing: 15) {
                         Text("Tap the flag of")
                         .font(.subheadline.weight(.heavy))
@@ -40,10 +40,7 @@ struct ContentView: View {
                             flagTapped(number)
                             answerFlag = number
                         } label: {
-                            Image(countries[number])
-                                .renderingMode(.original)
-                                .clipShape(Capsule())
-                                .shadow(radius: 5)
+                           FlagImage(text: countries[number])
                         }
                         
                     }
@@ -100,7 +97,31 @@ struct ContentView: View {
         return scoreValue[score] ?? "unknow"
     }
 }
+// ViewAndModifiers 2nd Challenge, struct implementation
+struct FlagImage: View {
+    var text : String
+    var body: some View {
+        Image(text)
+            .renderingMode(.original)
+            .clipShape(Capsule())
+            .shadow(radius: 5)
+    }
+}
 
+// ViewAndModifiers Third Challenge,  implementation
+struct LargeTitle: ViewModifier{
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle)
+            .foregroundColor(.blue)
+    }
+}
+
+extension View{
+    func largeTitle() -> some View {
+        modifier(LargeTitle())
+    }
+}
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
