@@ -13,10 +13,12 @@ struct ContentView: View {
     @State private var showingEndGame = false
     @State private var scoreTitle = ""
     @State private var rounds = 0
-    
+    @State private var angle = 0.0 //Challenge 1 Animation
+    @State private var animation = false
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
-    @State private var answerFlag = 0
+    @State private var answerFlag = 3
+    @State private var isCorrect = false
     var body: some View {
         ZStack {
             RadialGradient(stops: [
@@ -39,10 +41,16 @@ struct ContentView: View {
                         Button {
                             flagTapped(number)
                             answerFlag = number
+                            //Challenge 1 Animation
+                            if isCorrect {
+                            withAnimation {angle += 360}
+                            }
                         } label: {
                            FlagImage(text: countries[number])
-                        }
-                        
+                        }//Challenge 1 Animation
+                        .rotation3DEffect( isCorrect && correctAnswer == number ? Angle(degrees: angle) : Angle(degrees: 0.0), axis: (x:0,y:1,z:0))
+                        .opacity(answerFlag != number && animation  ? 0.25 : 1 )
+                        .scaleEffect( !isCorrect && answerFlag == number ? 0.5 : 1)
                     }
                 }
                     .frame(maxWidth: .infinity)
@@ -58,6 +66,7 @@ struct ContentView: View {
             }
             .padding()
             
+            
         }
         .alert(scoreTitle, isPresented: $showingScore) {
             Button("Continue", action: askQuestion)
@@ -72,6 +81,7 @@ struct ContentView: View {
     }
     func flagTapped(_ number: Int) {
         if number == correctAnswer {
+            isCorrect = true
             scoreTitle = "Correct"
             score += 1
         } else {
@@ -83,10 +93,14 @@ struct ContentView: View {
         } else {
             showingEndGame = true
         }
+        withAnimation { animation = true}
     }
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        isCorrect = false
+        answerFlag = 3
+        withAnimation {animation = false}
     }
     func resetGame(){
         score = 0
