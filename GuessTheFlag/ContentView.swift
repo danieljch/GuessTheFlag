@@ -51,6 +51,7 @@ struct ContentView: View {
                         .rotation3DEffect( isCorrect && correctAnswer == number ? Angle(degrees: angle) : Angle(degrees: 0.0), axis: (x:0,y:1,z:0))
                         .opacity(answerFlag != number && animation  ? 0.25 : 1 )
                         .scaleEffect( !isCorrect && answerFlag == number ? 0.5 : 1)
+                        .animation(.default, value: answerFlag)
                     }
                 }
                     .frame(maxWidth: .infinity)
